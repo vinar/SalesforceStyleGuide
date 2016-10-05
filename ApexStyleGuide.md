@@ -240,8 +240,7 @@ public class MyClass {
         for (Integer i : wasteOfSpace) {
             System.debug('Here\'s an integer! ' + i);
         }
-    }
-  
+    }  
 }
 ```
 
