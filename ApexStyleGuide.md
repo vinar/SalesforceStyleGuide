@@ -25,6 +25,9 @@
   - [Trigger](#trigger)
   - [Methods](#methods)
   - [Test classes](#test-classes)
+- [Example Code](#example-code)
+  - [Test Class](#test-class-example)
+  - [Trigger](#trigger-example)
 
 <!-- /MarkdownTOC -->
 
@@ -231,8 +234,42 @@ Name a class or trigger after what it does.  Triggers should be verbs and end wi
 ### Trigger
 Name a trigger after the SObject it operates against.  Triggers should be named with a combination of the SObject type followed by the word `Trigger` (e.g., `AccountTrigger`, `OpportunityTrigger`, `SomeCustomObjectTrigger`).  Triggers should not contain any logic, that should be left to the Handler class.
 
-Example:
+<a name="methods"></a>
+### Methods
+Methods should all be verbs.  Getters and setters should have no side effects (with the exception of setting up cached values and/or logging), and should begin with `get` or `set`.
 
+<a name="test-classes"></a>
+### Test classes
+Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `StuffBeingTestedTest`.
+
+<a name="example-code"></a>
+## Example Code
+
+<a name="test-class-example"></a>
+## Test Class Example
+
+Example:
+```java
+@isTest class AccountServiceTest {
+
+    @isTest static void testSetAccountType() {
+        Account acct = new Account(Name='Test1');
+
+        Test.startTest();
+	
+        AccountService.setAccountType(new List<Account> { acct });
+	
+        Test.stopTest();
+
+        System.assertEquals(AccountService.ACCOUNT_TYPE_CUSTOMER, acct.Type);
+    }
+}
+```
+
+<a name="trigger-example"></a>
+## Trigger & Related Class Example
+
+Example:
 ```java
 trigger AccountTrigger on Account (before insert, before update, before delete,
 								after insert, after update, after delete, after undelete) {
@@ -354,29 +391,3 @@ public without sharing class AccountService {
 } 
 ```
 
-<a name="methods"></a>
-### Methods
-Methods should all be verbs.  Getters and setters should have no side effects (with the exception of setting up cached values and/or logging), and should begin with `get` or `set`.
-
-<a name="test-classes"></a>
-### Test classes
-Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `StuffBeingTestedTest`.
-
-Example
-
-```java
-@isTest class AccountServiceTest {
-
-    @isTest static void testSetAccountType() {
-        Account acct = new Account(Name='Test1');
-
-        Test.startTest();
-	
-        AccountService.setAccountType(new List<Account> { acct });
-	
-        Test.stopTest();
-
-        System.assertEquals(AccountService.ACCOUNT_TYPE_CUSTOMER, acct.Type);
-    }
-}
-```
