@@ -11,6 +11,7 @@
     - [Other Non-ASCII Characters](#other-non-ascii-characters)
 - [Structure](#structure)
   - [Indentation](#indentation)
+  - [Comments](#comments)
   - [New-lines and spaces](#new-lines-and-spaces)
   - [Prefer Explicit Declarations](#prefer-explicit-declarations)
   - [`@isTest`](#istest)
@@ -20,7 +21,8 @@
 - [Apex-Specific SObject Constructor Syntax](#apex-specific-sobject-constructor-syntax)
 - [Test.startTest() and Test.stopTest()](#teststarttest-and-teststoptest)
 - [Naming Conventions](#naming-conventions)
-  - [Class and Trigger](#class-and-trigger)
+  - [Class](#class)
+  - [Trigger](#trigger)
   - [Methods](#methods)
   - [Test classes](#test-classes)
 
@@ -60,13 +62,18 @@ What is important is that each class order its members in some logical order, wh
 
 <a name="indentation"></a>
 ### Indentation
-All blocks of code should be indented with 2 spaces.  Spaces, not tabs, to ensure that it looks the same on everyone's screen and doesn't waste horizontal space.
+All blocks of code should be indented with 4 spaces.  Spaces, not tabs, to ensure that it looks the same on everyone's screen and doesn't waste horizontal space.
+
+<a name="comments"></a>
+### Comments
+Prefer placing comments on a line by themselves. Single line comments use double forward slash's `//` followed by a space.
+  >  `// Here is a single line comment`
+  
+  >  `/* Don't add single line comments this way */`
 
 <a name="new-lines-and-spaces"></a>
 ### New-lines and spaces
 Use vertical whitespace as appropriate.  Don't be afraid to separate blocks of code.
-
-Prefer placing comments on a line by themselves.
 
 Open braces should have a space before them and not a newline.  The matching close brace should line up with the start of the opening brace's line.
 
@@ -78,7 +85,13 @@ In method definitions, there should be no space before the open parenthesis, and
 
 In method calls and definitions, there should not be whitespace between the name of the method and the open parenthesis.
 
-A single space should separate binary operators from the surrounding elements (e.g., `+`, `||`, `=`, `>=`).  Unary operators (`!`, `-`) should be attached to their parameters.  A colon inside a `for each` loop (e.g., `for (Contact cnt : contacts) {`) should have one space on either side.  There should be no whitespace before commas, and one space after (e.g., `System.debug(LoggingLevel.INFO, 'fsdfs');`).
+A single space should separate binary operators from the surrounding elements (e.g., `+`, `||`, `=`, `>=`).  
+
+Unary operators (`!`, `-`) should be attached to their parameters.  
+
+A colon inside a `for each` loop (e.g., `for (Contact cnt : contacts) {`) should have one space on either side.  
+
+There should be no whitespace before commas, and one space after (e.g., `System.debug(LoggingLevel.INFO, 'fsdfs');`).
 
 If using C#-style properties, code should follow the following rules:
 
@@ -93,7 +106,6 @@ Always specify:
 
 * `global`/`public`/`private` modifiers - prefer `private`, and if possible, `static`
 * `with sharing`/`without sharing`
-* `this` when calling local methods or setting local members/properties.
 
 <a name="istest"></a>
 ### `@isTest`
@@ -179,11 +191,10 @@ Example (in context):
 
 ```java
 String typeToSelect = 'abcde';
-List<Contact> cnts = [
-  SELECT Id, FirstName, LastName, Phone, Email,
-    MailingCity, MailingState,
-    (SELECT Id, ActivityDate, Origin, Type,
-       WhatId, What.Name, RecordTypeId
+List<Contact> contacts = [
+  SELECT Id, FirstName, LastName, Phone, MobilePhone, Email, Salutation, Title, Department,
+    MailingCity, MailingState, MailingCountry, MailingPostalCode,
+    (SELECT Id, ActivityDate, Origin, Type, WhatId, What.Name, RecordTypeId
      FROM ActivityHistories
      WHERE Type = :typeToSelect)
   FROM Contact
@@ -212,9 +223,136 @@ When writing test cases, always use `Test.startTest();` and `Test.stopTest();`. 
 <a name="naming-conventions"></a>
 ## Naming Conventions
 
-<a name="class-and-trigger"></a>
-### Class and Trigger
+<a name="class"></a>
+### Class
 Name a class or trigger after what it does.  Triggers should be verbs and end with `Trigger` (e.g., `SyncCaseToplineWithDescriptionTrigger`).  Controllers and Controller Extensions should end with the word `Controller`.
+
+<a name="trigger"></a>
+### Trigger
+Name a trigger after the SObject it operates against.  Triggers should be named with a combination of the SObject type followed by the word `Trigger` (e.g., `AccountTrigger`, `OpportunityTrigger`, `SomeCustomObjectTrigger`).  Triggers should not contain any logic, that should be left to the Handler class.
+
+Example:
+
+```java
+trigger AccountTrigger on Account (before insert, before update, before delete,
+								after insert, after update, after delete, after undelete) {
+
+	AccountTriggerHandler handler = new AccountTriggerHandler(Trigger.isExecuting, Trigger.size);
+
+	if (Trigger.isInsert && Trigger.isBefore) {
+		handler.onBeforeInsert(Trigger.new, Trigger.newMap);
+	}
+	else if (Trigger.isInsert && Trigger.isAfter) {
+		handler.onAfterInsert(Trigger.new, Trigger.newMap);
+	}
+	else if (Trigger.isUpdate && Trigger.isBefore) {
+		handler.onBeforeUpdate(Trigger.new, Trigger.newMap, Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isUpdate && Trigger.isAfter) {
+		handler.onAfterUpdate(Trigger.new, Trigger.newMap, Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isDelete && Trigger.isBefore) {
+		handler.onBeforeDelete(Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isDelete && Trigger.isAfter) {
+		handler.onAfterDelete(Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isUndelete) {
+		handler.onUndelete(Trigger.new);
+	}
+} 
+```
+
+```java
+public with sharing class AccountTriggerHandler {
+
+    private Boolean isExecutingFlag = false;
+    private Integer batchSize = 0;
+    public static Boolean firstRun = true;
+
+    public AccountTriggerHandler(Boolean isExecuting, Integer size){
+        isExecutingFlag = isExecuting;
+        batchSize = size;
+    }
+
+    public void onBeforeInsert(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap) {
+        if (firstRun) {
+            firstRun = false;
+            
+            // Call additional methods here. 
+	    // example
+            AccountService.setAccountType(currentAccounts);
+        }
+    }
+
+    public void onAfterInsert(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap) {
+        // Call additional methods here. 		
+    }
+
+    public void onBeforeUpdate(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap, List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        if (firstRun) {
+            firstRun = false;
+	
+            // Call additional methods here
+        }
+    }
+
+    public void onAfterUpdate(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap, List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        // Call additional methods here		
+    }
+
+    public void onBeforeDelete(List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        if (firstRun) {
+            firstRun = false;
+
+            // Call additional methods here
+        }
+    }
+
+    public void onAfterDelete(List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        // Call additional methods here
+    }
+
+    public void onUndelete(List<Account> currentAccounts) {
+        if (firstRun) {
+            firstRun = false;
+
+            // Call additional methods here
+        }
+    }
+
+    public Boolean IsTriggerContext{
+        get { return isExecutingFlag; }
+    }
+
+    public Boolean IsVisualforcePageContext{
+        get { return !IsTriggerContext; }
+    }
+
+    public Boolean IsWebServiceContext{
+        get { return !IsTriggerContext; }
+    }
+
+    public Boolean IsExecuteAnonymousContext{
+        get { return !IsTriggerContext; }
+    }
+} 
+
+```
+
+```java
+public without sharing class AccountService {
+
+    public final static String ACCOUNT_TYPE_CUSTOMER = 'Customer'
+
+    // Set the Account Type upon creation
+    public static void setAccountType(List<Account> currentAccounts) {
+        for (Account a : currentAccounts) {
+            a.Type = ACCOUNT_TYPE_CUSTOMER;
+        }
+    }
+} 
+```
 
 <a name="methods"></a>
 ### Methods
@@ -222,4 +360,23 @@ Methods should all be verbs.  Getters and setters should have no side effects (w
 
 <a name="test-classes"></a>
 ### Test classes
-Test classes should be named `TEST_ClassUnderTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `TEST_StuffThatsGenerallyBeingTested`.
+Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `StuffBeingTestedTest`.
+
+Example
+
+```java
+@isTest class AccountServiceTest {
+
+    @isTest static void testSetAccountType() {
+        Account acct = new Account(Name='Test1');
+
+        Test.startTest();
+	
+        AccountService.setAccountType(new List<Account> { acct });
+	
+        Test.stopTest();
+
+        System.assertEquals(AccountService.ACCOUNT_TYPE_CUSTOMER, acct.Type);
+    }
+}
+```
