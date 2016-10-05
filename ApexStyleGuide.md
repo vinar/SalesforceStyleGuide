@@ -192,7 +192,7 @@ Example (in context):
 ```java
 String typeToSelect = 'abcde';
 List<Contact> cnts = [
-  SELECT Id, FirstName, LastName, Phone, MobilePhone, Email, Salutation, Title, Department
+  SELECT Id, FirstName, LastName, Phone, MobilePhone, Email, Salutation, Title, Department,
     MailingCity, MailingState, MailingCountry, MailingPostalCode
     (SELECT Id, ActivityDate, Origin, Type, WhatId, What.Name, RecordTypeId
      FROM ActivityHistories
