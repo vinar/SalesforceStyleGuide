@@ -194,53 +194,53 @@ Test classes should be named `MyClassTest`.  If the test is not a unit-level tes
 ```java
 public class MyClass {
 
-  private Contact internallyUsedContact { get; set; }
+    private Contact internallyUsedContact { get; set; }
 
-  public Integer calculatedInteger {
-    get {
-      return 5;
-    }
-    set {
-      this.internallyUsedContact = [
-        SELECT Id
-        FROM Contact
-        WHERE Number_of_Peanuts__c > :value
-        LIMIT 1];
-    }
-  }
-
-  private Id contactId {
-    get;
-    set {
-      System.debug('Why do this?');
-      this.contactId = value;
-    }
-  }
-
-  public void foo(Integer bar) {
-    if (bar == 3) {
-      // Diane often asks when bar is 3.
-      System.debug(this.debugCode(bar) + ' - hi there!');
-      return;
-    } 
-    else if (bar > 7) {
-      List<Integer> wasteOfSpace = new List<Integer>();
-      do {
-        wasteOfSpace.add(this.calculatedInteger);
-      } while (wasteOfSpace.size() < 5);
-    } 
-    else {
-      try {
-        upsert v;
-      } catch (Exception ex) {
-        handleException(ex);
-      }
+    public Integer calculatedInteger {
+        get {
+            return 5;
+        }
+        set {
+            internallyUsedContact = [
+                SELECT Id
+                FROM Contact
+                WHERE Number_of_Peanuts__c > :value
+                LIMIT 1];
+        }
     }
 
-    for (Integer i : wasteOfSpace) {
-      System.debug('Here\'s an integer! ' + i);
+    private Id contactId {
+        get;
+        set {
+            System.debug('Why do this?');
+            this.contactId = value;
+        }
     }
-  }
+
+    public void foo(Integer bar) {
+        if (bar == 3) {
+            // Diane often asks when bar is 3.
+            System.debug(this.debugCode(bar) + ' - hi there!');
+            return;
+        } 
+        else if (bar > 7) {
+            List<Integer> wasteOfSpace = new List<Integer>();
+            do {
+                wasteOfSpace.add(this.calculatedInteger);
+            } while (wasteOfSpace.size() < 5);
+        } 
+        else {
+            try {
+                upsert v;
+            } catch (Exception ex) {
+                handleException(ex);
+            }
+        }
+
+        for (Integer i : wasteOfSpace) {
+            System.debug('Here\'s an integer! ' + i);
+        }
+    }
   
 }
 ```
