@@ -67,8 +67,11 @@ All blocks of code should be indented with 2 spaces.  Spaces, not tabs, to ensur
 ### New-lines and spaces
 Use vertical whitespace as appropriate.  Don't be afraid to separate blocks of code.
 
-Prefer placing comments on a line by themselves.
-
+Prefer placing comments on a line by themselves. Single line comments use double forward slash's `//` followed by a space.
+  >  `// Here is a single line comment`
+  
+  >  `/* Don't add single line comments this way */`
+  
 Open braces should have a space before them and not a newline.  The matching close brace should line up with the start of the opening brace's line.
 
 `else`s and `else if`s do not get a new-line before them.  Neither do `catch`es or `while`s in a `do...while` loop.
@@ -79,7 +82,13 @@ In method definitions, there should be no space before the open parenthesis, and
 
 In method calls and definitions, there should not be whitespace between the name of the method and the open parenthesis.
 
-A single space should separate binary operators from the surrounding elements (e.g., `+`, `||`, `=`, `>=`).  Unary operators (`!`, `-`) should be attached to their parameters.  A colon inside a `for each` loop (e.g., `for (Contact cnt : contacts) {`) should have one space on either side.  There should be no whitespace before commas, and one space after (e.g., `System.debug(LoggingLevel.INFO, 'fsdfs');`).
+A single space should separate binary operators from the surrounding elements (e.g., `+`, `||`, `=`, `>=`).  
+
+Unary operators (`!`, `-`) should be attached to their parameters.  
+
+A colon inside a `for each` loop (e.g., `for (Contact cnt : contacts) {`) should have one space on either side.  
+
+There should be no whitespace before commas, and one space after (e.g., `System.debug(LoggingLevel.INFO, 'fsdfs');`).
 
 If using C#-style properties, code should follow the following rules:
 
@@ -94,7 +103,6 @@ Always specify:
 
 * `global`/`public`/`private` modifiers - prefer `private`, and if possible, `static`
 * `with sharing`/`without sharing`
-* `this` when calling local methods or setting local members/properties.
 
 <a name="istest"></a>
 ### `@isTest`
@@ -259,4 +267,4 @@ Methods should all be verbs.  Getters and setters should have no side effects (w
 
 <a name="test-classes"></a>
 ### Test classes
-Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `TEST_StuffThatsGenerallyBeingTested`.
+Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `StuffBeingTestedTest`.
