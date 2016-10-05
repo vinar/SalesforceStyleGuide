@@ -248,7 +248,6 @@ Test classes should be named `MyClassTest`.  If the test is not a unit-level tes
 <a name="test-class-example"></a>
 ## Test Class Example
 
-Example:
 ```java
 @isTest class AccountServiceTest {
 
@@ -267,9 +266,8 @@ Example:
 ```
 
 <a name="trigger-example"></a>
-## Trigger & Related Class Example
+## Trigger & Related Classes Example
 
-Example:
 ```java
 trigger AccountTrigger on Account (before insert, before update, before delete,
 								after insert, after update, after delete, after undelete) {
