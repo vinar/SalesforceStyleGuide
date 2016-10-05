@@ -344,7 +344,7 @@ public with sharing class AccountTriggerHandler {
 ```java
 public without sharing class AccountService {
 
-    private final static String ACCOUNT_TYPE_CUSTOMER = 'Customer'
+    public final static String ACCOUNT_TYPE_CUSTOMER = 'Customer'
 
     // Set the Account Type upon creation
     public static void setAccountType(List<Account> currentAccounts) {
@@ -377,7 +377,7 @@ Example
 	
         Test.stopTest();
 
-        System.assertEquals('Customer', acct.Type);
+        System.assertEquals(AccountService.ACCOUNT_TYPE_CUSTOMER, acct.Type);
     }
 }
 ```
