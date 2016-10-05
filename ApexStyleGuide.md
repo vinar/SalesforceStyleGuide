@@ -193,7 +193,7 @@ Example (in context):
 String typeToSelect = 'abcde';
 List<Contact> cnts = [
   SELECT Id, FirstName, LastName, Phone, MobilePhone, Email, Salutation, Title, Department,
-    MailingCity, MailingState, MailingCountry, MailingPostalCode
+    MailingCity, MailingState, MailingCountry, MailingPostalCode,
     (SELECT Id, ActivityDate, Origin, Type, WhatId, What.Name, RecordTypeId
      FROM ActivityHistories
      WHERE Type = :typeToSelect)
