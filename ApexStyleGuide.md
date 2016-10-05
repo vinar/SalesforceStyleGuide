@@ -133,10 +133,11 @@ public class MyClass {
       return 5;
     }
     set {
-      this.internallyUsedContact = [SELECT Id
-                                    FROM Contact
-                                    WHERE Number_of_Peanuts__c > :value
-                                    LIMIT 1];
+      this.internallyUsedContact = [
+        SELECT Id
+        FROM Contact
+        WHERE Number_of_Peanuts__c > :value
+        LIMIT 1];
     }
   }
 
@@ -153,12 +154,14 @@ public class MyClass {
       // Diane often asks when bar is 3.
       System.debug(this.debugCode(bar) + ' - hi there!');
       return;
-    } else if (bar > 7) {
+    } 
+    else if (bar > 7) {
       List<Integer> wasteOfSpace = new List<Integer>();
       do {
         wasteOfSpace.add(this.calculatedInteger);
       } while (wasteOfSpace.size() < 5);
-    } else {
+    } 
+    else {
       try {
         upsert v;
       } catch (Exception ex) {
@@ -188,14 +191,15 @@ Example (in context):
 
 ```java
 String typeToSelect = 'abcde';
-List<Contact> cnts = [SELECT Id, FirstName, LastName, Phone, Email,
-                             MailingCity, MailingState,
-                             (SELECT Id, ActivityDate, Origin, Type,
-                                     WhatId, What.Name, RecordTypeId
-                              FROM ActivityHistories
-                              WHERE Type = :typeToSelect)
-                      FROM Contact
-                      WHERE CreatedDate >= TODAY];
+List<Contact> cnts = [
+  SELECT Id, FirstName, LastName, Phone, Email,
+    MailingCity, MailingState,
+    (SELECT Id, ActivityDate, Origin, Type,
+       WhatId, What.Name, RecordTypeId
+     FROM ActivityHistories
+     WHERE Type = :typeToSelect)
+  FROM Contact
+  WHERE CreatedDate >= TODAY];
 ```
 
 <a name="apex-specific-sobject-constructor-syntax"></a>
@@ -205,11 +209,12 @@ When creating an SObject, generally prefer the Apex-specific syntax wherein all 
 Example:
 
 ```java
-Contact c = new Contact(RecordTypeId = CONTACT_RECORDTYPE_ID,
-                        FirstName = firstName,
-                        LastName = surname,
-                        MailingCountry = DEFAULT_COUNTRY
-                       );
+Contact c = new Contact(
+  RecordTypeId = CONTACT_RECORDTYPE_ID,
+  FirstName = firstName,
+  LastName = surname,
+  MailingCountry = DEFAULT_COUNTRY
+);
 ```
 
 <a name="teststarttest-and-teststoptest"></a>
