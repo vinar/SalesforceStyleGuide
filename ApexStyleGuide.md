@@ -11,6 +11,7 @@
     - [Other Non-ASCII Characters](#other-non-ascii-characters)
 - [Structure](#structure)
   - [Indentation](#indentation)
+  - [Comments](#comments)
   - [New-lines and spaces](#new-lines-and-spaces)
   - [Prefer Explicit Declarations](#prefer-explicit-declarations)
   - [`@isTest`](#istest)
@@ -63,15 +64,17 @@ What is important is that each class order its members in some logical order, wh
 ### Indentation
 All blocks of code should be indented with 4 spaces.  Spaces, not tabs, to ensure that it looks the same on everyone's screen and doesn't waste horizontal space.
 
-<a name="new-lines-and-spaces"></a>
-### New-lines and spaces
-Use vertical whitespace as appropriate.  Don't be afraid to separate blocks of code.
-
+<a name="comments"></a>
+### Comments
 Prefer placing comments on a line by themselves. Single line comments use double forward slash's `//` followed by a space.
   >  `// Here is a single line comment`
   
   >  `/* Don't add single line comments this way */`
-  
+
+<a name="new-lines-and-spaces"></a>
+### New-lines and spaces
+Use vertical whitespace as appropriate.  Don't be afraid to separate blocks of code.
+
 Open braces should have a space before them and not a newline.  The matching close brace should line up with the start of the opening brace's line.
 
 `else`s and `else if`s do not get a new-line before them.  Neither do `catch`es or `while`s in a `do...while` loop.
@@ -277,44 +280,45 @@ public with sharing class AccountTriggerHandler {
         if (firstRun) {
             firstRun = false;
             
-            // call additional methods here. 
-            AccountService.updateAccountType(currentAccounts);
+            // Call additional methods here. 
+	    // example
+            AccountService.setAccountType(currentAccounts);
         }
     }
 
     public void onAfterInsert(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap) {
-        // call additional methods here. 		
+        // Call additional methods here. 		
     }
 
     public void onBeforeUpdate(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap, List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
         if (firstRun) {
             firstRun = false;
 	
-            // call additional methods here
+            // Call additional methods here
         }
     }
 
     public void onAfterUpdate(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap, List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
-        // call additional methods here		
+        // Call additional methods here		
     }
 
     public void onBeforeDelete(List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
         if (firstRun) {
             firstRun = false;
 
-            // call additional methods here
+            // Call additional methods here
         }
     }
 
     public void onAfterDelete(List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
-        // call additional methods here
+        // Call additional methods here
     }
 
     public void onUndelete(List<Account> currentAccounts) {
         if (firstRun) {
             firstRun = false;
 
-            // call additional methods here
+            // Call additional methods here
         }
     }
 
@@ -340,9 +344,12 @@ public with sharing class AccountTriggerHandler {
 ```java
 public without sharing class AccountService {
 
-    public static void updateAccountType(List<Account> currentAccounts) {
+    private final static String ACCOUNT_TYPE_CUSTOMER = 'Customer'
+
+    // Set the Account Type upon creation
+    public static void setAccountType(List<Account> currentAccounts) {
         for (Account a : currentAccounts) {
-            a.Type = 'some constant';
+            a.Type = ACCOUNT_TYPE_CUSTOMER;
         }
     }
 } 
@@ -355,3 +362,22 @@ Methods should all be verbs.  Getters and setters should have no side effects (w
 <a name="test-classes"></a>
 ### Test classes
 Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `StuffBeingTestedTest`.
+
+Example
+
+```java
+@isTest class AccountServiceTest {
+
+    @isTest static void testSetAccountType() {
+        Account acct = new Account(Name='Test1');
+
+        Test.startTest();
+	
+        AccountService.setAccountType(new List<Account> { acct });
+	
+        Test.stopTest();
+
+        System.assertEquals('Customer', acct.Type);
+    }
+}
+```
