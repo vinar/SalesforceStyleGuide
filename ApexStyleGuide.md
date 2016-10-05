@@ -61,7 +61,7 @@ What is important is that each class order its members in some logical order, wh
 
 <a name="indentation"></a>
 ### Indentation
-All blocks of code should be indented with 2 spaces.  Spaces, not tabs, to ensure that it looks the same on everyone's screen and doesn't waste horizontal space.
+All blocks of code should be indented with 4 spaces.  Spaces, not tabs, to ensure that it looks the same on everyone's screen and doesn't waste horizontal space.
 
 <a name="new-lines-and-spaces"></a>
 ### New-lines and spaces
@@ -258,6 +258,93 @@ trigger AccountTrigger on Account (before insert, before update, before delete,
 	else if (Trigger.isUndelete) {
 		handler.onUndelete(Trigger.new);
 	}
+} 
+```
+
+```java
+public with sharing class AccountTriggerHandler {
+
+    private Boolean isExecutingFlag = false;
+    private Integer batchSize = 0;
+    public static Boolean firstRun = true;
+
+    public AccountTriggerHandler(Boolean isExecuting, Integer size){
+        isExecutingFlag = isExecuting;
+        batchSize = size;
+    }
+
+    public void onBeforeInsert(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap) {
+        if (firstRun) {
+            firstRun = false;
+            
+            // call additional methods here. 
+            AccountService.updateAccountType(currentAccounts);
+        }
+    }
+
+    public void onAfterInsert(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap) {
+        // call additional methods here. 		
+    }
+
+    public void onBeforeUpdate(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap, List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        if (firstRun) {
+            firstRun = false;
+	
+            // call additional methods here
+        }
+    }
+
+    public void onAfterUpdate(List<Account> currentAccounts, Map<Id, Account> currentAccountsMap, List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        // call additional methods here		
+    }
+
+    public void onBeforeDelete(List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        if (firstRun) {
+            firstRun = false;
+
+            // call additional methods here
+        }
+    }
+
+    public void onAfterDelete(List<Account> oldAccounts, Map<Id, Account> oldAccountsMap) {
+        // call additional methods here
+    }
+
+    public void onUndelete(List<Account> currentAccounts) {
+        if (firstRun) {
+            firstRun = false;
+
+            // call additional methods here
+        }
+    }
+
+    public Boolean IsTriggerContext{
+        get { return isExecutingFlag; }
+    }
+
+    public Boolean IsVisualforcePageContext{
+        get { return !IsTriggerContext; }
+    }
+
+    public Boolean IsWebServiceContext{
+        get { return !IsTriggerContext; }
+    }
+
+    public Boolean IsExecuteAnonymousContext{
+        get { return !IsTriggerContext; }
+    }
+} 
+
+```
+
+```java
+public without sharing class AccountService {
+
+    public static void updateAccountType(List<Account> currentAccounts) {
+        for (Account a : currentAccounts) {
+            a.Type = 'some constant';
+        }
+    }
 } 
 ```
 
