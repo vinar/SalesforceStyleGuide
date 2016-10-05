@@ -91,7 +91,7 @@ Unary operators (`!`, `-`) should be attached to their parameters.
 
 A colon inside a `for each` loop (e.g., `for (Contact cnt : contacts) {`) should have one space on either side.  
 
-There should be no whitespace before commas, and one space after (e.g., `System.debug(LoggingLevel.INFO, 'fsdfs');`).
+There should be no whitespace before commas, and one space after (e.g., `System.debug(LoggingLevel.INFO, 'some text');`).
 
 If using C#-style properties, code should follow the following rules:
 
@@ -173,7 +173,7 @@ public class MyClass {
       System.debug('Here\'s an integer! ' + i);
     }
   }
-
+  
 }
 ```
 
@@ -190,7 +190,7 @@ Long lists of fields in a `SELECT` clause should be ordered in a logical manner 
 Example (in context):
 
 ```java
-String typeToSelect = 'abcde';
+String typeToSelect = 'Email';
 List<Contact> contacts = [
   SELECT Id, FirstName, LastName, Phone, MobilePhone, Email, Salutation, Title, Department,
     MailingCity, MailingState, MailingCountry, MailingPostalCode,
@@ -280,7 +280,7 @@ public with sharing class AccountTriggerHandler {
             firstRun = false;
             
             // Call additional methods here. 
-	    // example
+            // example
             AccountService.setAccountType(currentAccounts);
         }
     }
