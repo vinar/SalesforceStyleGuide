@@ -16,7 +16,6 @@
   - [Prefer Explicit Declarations](#prefer-explicit-declarations)
   - [`@isTest`](#istest)
   - [Capitalization](#capitalization)
-  - [Example](#example)
 - [SOQL](#soql)
 - [Apex-Specific SObject Constructor Syntax](#apex-specific-sobject-constructor-syntax)
 - [Test.startTest() and Test.stopTest()](#teststarttest-and-teststoptest)
@@ -26,6 +25,7 @@
   - [Methods](#methods)
   - [Test classes](#test-classes)
 - [Example Code](#example-code)
+  - [Apex Class](#apex-class-example)
   - [Test Class](#test-class-example)
   - [Trigger](#trigger-example)
 
@@ -123,63 +123,6 @@ Native Apex methods and classes should generally be referenced as written in off
 
 However, when referencing any metadata (SObject, SObjectField, FieldSet, Action, Class, Page, etc.), use the declared capitalization.  Even when referencing a method, field, etc., that is not capitalized according to these rules, still use the declared capitalization.
 
-<a name="example"></a>
-### Example
-
-```java
-public class MyClass {
-
-  private Contact internallyUsedContact { get; set; }
-
-  public Integer calculatedInteger {
-    get {
-      return 5;
-    }
-    set {
-      this.internallyUsedContact = [
-        SELECT Id
-        FROM Contact
-        WHERE Number_of_Peanuts__c > :value
-        LIMIT 1];
-    }
-  }
-
-  private Id contactId {
-    get;
-    set {
-      System.debug('Why do this?');
-      this.contactId = value;
-    }
-  }
-
-  public void foo(Integer bar) {
-    if (bar == 3) {
-      // Diane often asks when bar is 3.
-      System.debug(this.debugCode(bar) + ' - hi there!');
-      return;
-    } 
-    else if (bar > 7) {
-      List<Integer> wasteOfSpace = new List<Integer>();
-      do {
-        wasteOfSpace.add(this.calculatedInteger);
-      } while (wasteOfSpace.size() < 5);
-    } 
-    else {
-      try {
-        upsert v;
-      } catch (Exception ex) {
-        handleException(ex);
-      }
-    }
-
-    for (Integer i : wasteOfSpace) {
-      System.debug('Here\'s an integer! ' + i);
-    }
-  }
-  
-}
-```
-
 
 <a name="soql"></a>
 ## SOQL
@@ -244,6 +187,63 @@ Test classes should be named `MyClassTest`.  If the test is not a unit-level tes
 
 <a name="example-code"></a>
 ## Example Code
+
+<a name="apex-class-example"></a>
+### Apex Class Example
+
+```java
+public class MyClass {
+
+  private Contact internallyUsedContact { get; set; }
+
+  public Integer calculatedInteger {
+    get {
+      return 5;
+    }
+    set {
+      this.internallyUsedContact = [
+        SELECT Id
+        FROM Contact
+        WHERE Number_of_Peanuts__c > :value
+        LIMIT 1];
+    }
+  }
+
+  private Id contactId {
+    get;
+    set {
+      System.debug('Why do this?');
+      this.contactId = value;
+    }
+  }
+
+  public void foo(Integer bar) {
+    if (bar == 3) {
+      // Diane often asks when bar is 3.
+      System.debug(this.debugCode(bar) + ' - hi there!');
+      return;
+    } 
+    else if (bar > 7) {
+      List<Integer> wasteOfSpace = new List<Integer>();
+      do {
+        wasteOfSpace.add(this.calculatedInteger);
+      } while (wasteOfSpace.size() < 5);
+    } 
+    else {
+      try {
+        upsert v;
+      } catch (Exception ex) {
+        handleException(ex);
+      }
+    }
+
+    for (Integer i : wasteOfSpace) {
+      System.debug('Here\'s an integer! ' + i);
+    }
+  }
+  
+}
+```
 
 <a name="test-class-example"></a>
 ## Test Class Example
