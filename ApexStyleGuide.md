@@ -20,7 +20,8 @@
 - [Apex-Specific SObject Constructor Syntax](#apex-specific-sobject-constructor-syntax)
 - [Test.startTest() and Test.stopTest()](#teststarttest-and-teststoptest)
 - [Naming Conventions](#naming-conventions)
-  - [Class and Trigger](#class-and-trigger)
+  - [Class](#class)
+  - [Trigger](#trigger)
   - [Methods](#methods)
   - [Test classes](#test-classes)
 
@@ -212,9 +213,45 @@ When writing test cases, always use `Test.startTest();` and `Test.stopTest();`. 
 <a name="naming-conventions"></a>
 ## Naming Conventions
 
-<a name="class-and-trigger"></a>
-### Class and Trigger
+<a name="class"></a>
+### Class
 Name a class or trigger after what it does.  Triggers should be verbs and end with `Trigger` (e.g., `SyncCaseToplineWithDescriptionTrigger`).  Controllers and Controller Extensions should end with the word `Controller`.
+
+<a name="trigger"></a>
+### Trigger
+Name a trigger after the SObject it operates against.  Triggers should be named with a combination of the SObject type followed by the word `Trigger` (e.g., `AccountTrigger`, `OpportunityTrigger`, `SomeCustomObjectTrigger`).  Triggers should not contain any logic, that should be left to the Handler class.
+
+Example:
+
+```java
+trigger AccountTrigger on Account (before insert, before update, before delete,
+								after insert, after update, after delete, after undelete) {
+
+	AccountTriggerHandler handler = new AccountTriggerHandler(Trigger.isExecuting, Trigger.size);
+
+	if (Trigger.isInsert && Trigger.isBefore) {
+		handler.onBeforeInsert(Trigger.new, Trigger.newMap);
+	}
+	else if (Trigger.isInsert && Trigger.isAfter) {
+		handler.onAfterInsert(Trigger.new, Trigger.newMap);
+	}
+	else if (Trigger.isUpdate && Trigger.isBefore) {
+		handler.onBeforeUpdate(Trigger.new, Trigger.newMap, Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isUpdate && Trigger.isAfter) {
+		handler.onAfterUpdate(Trigger.new, Trigger.newMap, Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isDelete && Trigger.isBefore) {
+		handler.onBeforeDelete(Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isDelete && Trigger.isAfter) {
+		handler.onAfterDelete(Trigger.old, Trigger.oldMap);
+	}
+	else if (Trigger.isUndelete) {
+		handler.onUndelete(Trigger.new);
+	}
+} 
+```
 
 <a name="methods"></a>
 ### Methods
@@ -222,4 +259,4 @@ Methods should all be verbs.  Getters and setters should have no side effects (w
 
 <a name="test-classes"></a>
 ### Test classes
-Test classes should be named `TEST_ClassUnderTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `TEST_StuffThatsGenerallyBeingTested`.
+Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `TEST_StuffThatsGenerallyBeingTested`.
