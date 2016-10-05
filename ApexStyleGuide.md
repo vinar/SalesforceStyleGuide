@@ -3,7 +3,6 @@
 <!-- MarkdownTOC depth=0 autolink=true autoanchor=true bracket=round -->
 
 - [Intro](#intro)
-  - [Goals](#goals)
   - [Sources](#sources)
 - [Basics](#basics)
   - [Special characters](#special-characters)
@@ -30,20 +29,9 @@
 <a name="intro"></a>
 ## Intro
 
-<a name="goals"></a>
-### Goals
-The goal of this style guide is like that of any other style guide.  Everyone has their own ideas of what makes code pretty.  As long as there's some logic behind that beauty, no one is right or wrong.  But it's important to have a standard so that:
-
-1. New and old developers, and outside contractors of all sorts can easily read, understand and maintain our growing code base.
-2. Code merges are easy to handle and are content-ful, not style-ful.
-
-See the Internet for more arguments about why style guides are important and useful things and not just a waste of time.
-
 <a name="sources"></a>
 ### Sources
-Since Apex is largely a Java and C# spin-off, I am largely relying on [Google Java Style Guide](http://google-styleguide.googlecode.com/svn/trunk/javaguide.html) first, then C# where those do not apply.  And some is just pulled out of my own opinions.
-
-This is still a living document and I'm happy to make changes.
+This started as a clone of [PolarisProject Style Guide](https://github.com/PolarisProject/salesforceStyleGuide) 
 
 <a name="basics"></a>
 ## Basics
