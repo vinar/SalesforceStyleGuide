@@ -194,6 +194,10 @@ Test classes should be named `MyClassTest`.  If the test is not a unit-level tes
 ```java
 public class MyClass {
 
+    private final static Integer SOME_CONSTANT = 3;
+    private final static Integer SOME_OTHER_CONSTANT = 7;
+    private final static Integer MAX_INTS = 5;
+
     private Contact internallyUsedContact { get; set; }
 
     public Integer calculatedInteger {
@@ -218,16 +222,17 @@ public class MyClass {
     }
 
     public void foo(Integer bar) {
-        if (bar == 3) {
-            // Diane often asks when bar is 3.
-            System.debug(this.debugCode(bar) + ' - hi there!');
+        // Add some comment about this
+        if (bar == SOME_CONSTANT) {
+            System.debug(debugCode(bar) + ' - hi there!');
             return;
         } 
-        else if (bar > 7) {
+	// And another comment here
+        else if (bar > SOME_OTHER_CONSTANT) {
             List<Integer> wasteOfSpace = new List<Integer>();
             do {
-                wasteOfSpace.add(this.calculatedInteger);
-            } while (wasteOfSpace.size() < 5);
+                wasteOfSpace.add(calculatedInteger);
+            } while (wasteOfSpace.size() < MAX_INTS);
         } 
         else {
             try {
