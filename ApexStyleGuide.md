@@ -171,11 +171,11 @@ When writing test cases, always use `Test.startTest();` and `Test.stopTest();`. 
 
 <a name="class"></a>
 ### Class
-Name a class or trigger after what it does. Controllers and Controller Extensions should end with the word `Controller`.
+Name a class or trigger after what it does (e.g., `AccountTriggerHandler`). Controllers and Controller Extensions should end with the word `Controller`.  Use `UpperCamelCase`.
 
 <a name="trigger"></a>
 ### Trigger
-Name a trigger after the SObject it operates against.  Triggers should be named with a combination of the SObject type followed by the word `Trigger` (e.g., `AccountTrigger`, `OpportunityTrigger`, `SomeCustomObjectTrigger`).  Triggers should not contain any logic, that should be left to the Handler class.
+Name a trigger after the SObject it operates against.  Triggers should be named with a combination of the SObject type followed by the word `Trigger` (e.g., `AccountTrigger`, `OpportunityTrigger`, `SomeCustomObjectTrigger`).  Triggers should not contain any logic, that should be left to the Handler class. Use `UpperCamelCase`.
 
 <a name="methods"></a>
 ### Methods
