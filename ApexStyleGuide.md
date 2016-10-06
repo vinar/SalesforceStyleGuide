@@ -171,7 +171,7 @@ When writing test cases, always use `Test.startTest();` and `Test.stopTest();`. 
 
 <a name="class"></a>
 ### Class
-Name a class or trigger after what it does.  Triggers should be verbs and end with `Trigger` (e.g., `SyncCaseToplineWithDescriptionTrigger`).  Controllers and Controller Extensions should end with the word `Controller`.
+Name a class or trigger after what it does. Controllers and Controller Extensions should end with the word `Controller`.
 
 <a name="trigger"></a>
 ### Trigger
