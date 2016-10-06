@@ -16,7 +16,6 @@
   - [Prefer Explicit Declarations](#prefer-explicit-declarations)
   - [`@isTest`](#istest)
   - [Capitalization](#capitalization)
-  - [Example](#example)
 - [SOQL](#soql)
 - [Apex-Specific SObject Constructor Syntax](#apex-specific-sobject-constructor-syntax)
 - [Test.startTest() and Test.stopTest()](#teststarttest-and-teststoptest)
@@ -25,6 +24,10 @@
   - [Trigger](#trigger)
   - [Methods](#methods)
   - [Test classes](#test-classes)
+- [Example Code](#example-code)
+  - [Apex Class](#apex-class-example)
+  - [Test Class](#test-class-example)
+  - [Trigger](#trigger-example)
 
 <!-- /MarkdownTOC -->
 
@@ -120,63 +123,6 @@ Native Apex methods and classes should generally be referenced as written in off
 
 However, when referencing any metadata (SObject, SObjectField, FieldSet, Action, Class, Page, etc.), use the declared capitalization.  Even when referencing a method, field, etc., that is not capitalized according to these rules, still use the declared capitalization.
 
-<a name="example"></a>
-### Example
-
-```java
-public class MyClass {
-
-  private Contact internallyUsedContact { get; set; }
-
-  public Integer calculatedInteger {
-    get {
-      return 5;
-    }
-    set {
-      this.internallyUsedContact = [
-        SELECT Id
-        FROM Contact
-        WHERE Number_of_Peanuts__c > :value
-        LIMIT 1];
-    }
-  }
-
-  private Id contactId {
-    get;
-    set {
-      System.debug('Why do this?');
-      this.contactId = value;
-    }
-  }
-
-  public void foo(Integer bar) {
-    if (bar == 3) {
-      // Diane often asks when bar is 3.
-      System.debug(this.debugCode(bar) + ' - hi there!');
-      return;
-    } 
-    else if (bar > 7) {
-      List<Integer> wasteOfSpace = new List<Integer>();
-      do {
-        wasteOfSpace.add(this.calculatedInteger);
-      } while (wasteOfSpace.size() < 5);
-    } 
-    else {
-      try {
-        upsert v;
-      } catch (Exception ex) {
-        handleException(ex);
-      }
-    }
-
-    for (Integer i : wasteOfSpace) {
-      System.debug('Here\'s an integer! ' + i);
-    }
-  }
-  
-}
-```
-
 
 <a name="soql"></a>
 ## SOQL
@@ -231,7 +177,95 @@ Name a class or trigger after what it does.  Triggers should be verbs and end wi
 ### Trigger
 Name a trigger after the SObject it operates against.  Triggers should be named with a combination of the SObject type followed by the word `Trigger` (e.g., `AccountTrigger`, `OpportunityTrigger`, `SomeCustomObjectTrigger`).  Triggers should not contain any logic, that should be left to the Handler class.
 
-Example:
+<a name="methods"></a>
+### Methods
+Methods should all be verbs.  Getters and setters should have no side effects (with the exception of setting up cached values and/or logging), and should begin with `get` or `set`.
+
+<a name="test-classes"></a>
+### Test classes
+Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `StuffBeingTestedTest`.
+
+<a name="example-code"></a>
+## Example Code
+
+<a name="apex-class-example"></a>
+### Apex Class Example
+
+```java
+public class MyClass {
+
+    private Contact internallyUsedContact { get; set; }
+
+    public Integer calculatedInteger {
+        get {
+            return 5;
+        }
+        set {
+            internallyUsedContact = [
+                SELECT Id
+                FROM Contact
+                WHERE Number_of_Peanuts__c > :value
+                LIMIT 1];
+        }
+    }
+
+    private Id contactId {
+        get;
+        set {
+            System.debug('Why do this?');
+            this.contactId = value;
+        }
+    }
+
+    public void foo(Integer bar) {
+        if (bar == 3) {
+            // Diane often asks when bar is 3.
+            System.debug(this.debugCode(bar) + ' - hi there!');
+            return;
+        } 
+        else if (bar > 7) {
+            List<Integer> wasteOfSpace = new List<Integer>();
+            do {
+                wasteOfSpace.add(this.calculatedInteger);
+            } while (wasteOfSpace.size() < 5);
+        } 
+        else {
+            try {
+                upsert v;
+            } catch (Exception ex) {
+                handleException(ex);
+            }
+        }
+
+        for (Integer i : wasteOfSpace) {
+            System.debug('Here\'s an integer! ' + i);
+        }
+    }  
+}
+```
+
+<a name="test-class-example"></a>
+## Test Class Example
+
+```java
+@isTest class AccountServiceTest {
+
+    @isTest static void testSetAccountType() {
+        Account acct = new Account(Name='Test1');
+
+        Test.startTest();
+	
+        AccountService.setAccountType(new List<Account> { acct });
+	
+        Test.stopTest();
+
+        System.assertEquals(AccountService.ACCOUNT_TYPE_CUSTOMER, acct.Type);
+    }
+}
+```
+
+<a name="trigger-example"></a>
+## Trigger & Related Classes Example
 
 ```java
 trigger AccountTrigger on Account (before insert, before update, before delete,
@@ -354,29 +388,3 @@ public without sharing class AccountService {
 } 
 ```
 
-<a name="methods"></a>
-### Methods
-Methods should all be verbs.  Getters and setters should have no side effects (with the exception of setting up cached values and/or logging), and should begin with `get` or `set`.
-
-<a name="test-classes"></a>
-### Test classes
-Test classes should be named `MyClassTest`.  If the test is not a unit-level test but instead a broader test case, it it should be named `StuffBeingTestedTest`.
-
-Example
-
-```java
-@isTest class AccountServiceTest {
-
-    @isTest static void testSetAccountType() {
-        Account acct = new Account(Name='Test1');
-
-        Test.startTest();
-	
-        AccountService.setAccountType(new List<Account> { acct });
-	
-        Test.stopTest();
-
-        System.assertEquals(AccountService.ACCOUNT_TYPE_CUSTOMER, acct.Type);
-    }
-}
-```
