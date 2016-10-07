@@ -227,7 +227,7 @@ public class MyClass {
             System.debug(debugCode(bar) + ' - hi there!');
             return;
         } 
-	// And another comment here
+        // And another comment here
         else if (bar > SOME_OTHER_CONSTANT) {
             List<Integer> wasteOfSpace = new List<Integer>();
             do {
