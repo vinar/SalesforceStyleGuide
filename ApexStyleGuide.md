@@ -309,7 +309,7 @@ public with sharing class AccountTriggerHandler {
     private Integer batchSize = 0;
     public static Boolean firstRun = true;
 
-    public AccountTriggerHandler(Boolean isExecuting, Integer size){
+    public AccountTriggerHandler(Boolean isExecuting, Integer size) {
         isExecutingFlag = isExecuting;
         batchSize = size;
     }
@@ -360,19 +360,19 @@ public with sharing class AccountTriggerHandler {
         }
     }
 
-    public Boolean IsTriggerContext{
+    public Boolean IsTriggerContext {
         get { return isExecutingFlag; }
     }
 
-    public Boolean IsVisualforcePageContext{
+    public Boolean IsVisualforcePageContext {
         get { return !IsTriggerContext; }
     }
 
-    public Boolean IsWebServiceContext{
+    public Boolean IsWebServiceContext {
         get { return !IsTriggerContext; }
     }
 
-    public Boolean IsExecuteAnonymousContext{
+    public Boolean IsExecuteAnonymousContext {
         get { return !IsTriggerContext; }
     }
 } 
@@ -382,7 +382,7 @@ public with sharing class AccountTriggerHandler {
 ```java
 public without sharing class AccountService {
 
-    public final static String ACCOUNT_TYPE_CUSTOMER = 'Customer'
+    public final static String ACCOUNT_TYPE_CUSTOMER = 'Customer';
 
     // Set the Account Type upon creation
     public static void setAccountType(List<Account> currentAccounts) {
