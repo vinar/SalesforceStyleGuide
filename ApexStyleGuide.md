@@ -76,8 +76,6 @@ Prefer placing comments on a line by themselves. Single line comments use double
 
 <a name="new-lines-and-spaces"></a>
 ### New-lines and spaces
-Use vertical whitespace as appropriate.  Don't be afraid to separate blocks of code.
-
 Open braces should have a space before them and not a newline.  The matching close brace should line up with the start of the opening brace's line.
 
 `else`s and `else if`s do not get a new-line before them.  Neither do `catch`es or `while`s in a `do...while` loop.
