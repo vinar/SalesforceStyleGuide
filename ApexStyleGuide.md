@@ -65,7 +65,7 @@ What is important is that each class order its members in some logical order, wh
 
 <a name="indentation"></a>
 ### Indentation
-All blocks of code should be indented with 4 spaces.  Spaces, not tabs, to ensure that it looks the same on everyone's screen and doesn't waste horizontal space.
+All blocks of code should be indented with 4 spaces.  Spaces, not tabs, to ensure that it looks the same on everyone's screen.
 
 <a name="comments"></a>
 ### Comments
