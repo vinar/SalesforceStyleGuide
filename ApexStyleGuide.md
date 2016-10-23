@@ -78,21 +78,25 @@ Prefer placing comments on a line by themselves. Single line comments use double
 ### New-lines and spaces
 Open braces should have a space before them and not a newline.  The matching close brace should line up with the start of the opening brace's line.
 
-`else`s and `else if`s do not get a new-line before them.  Neither do `catch`es or `while`s in a `do...while` loop.
-
 The parenthetical clause in `if`, `while`, `do`, `catch`, etc., statements should be preceded and followed by a single space.
+>e.g., `if (a == b) {`
 
 In method definitions, there should be no space before the open parenthesis, and one space after.
+>e.g., `public void myMethod() {`
 
 In method calls and definitions, there should not be whitespace between the name of the method and the open parenthesis.
+>e.g., `obj.myMethod();`
 
-A single space should separate binary operators from the surrounding elements (e.g., `+`, `||`, `=`, `>=`).  
+A single space should separate binary operators (e.g., `+`, `||`, `=`, `>=`) from the surrounding elements. 
+>e.g., `if (a || b)`
 
-Unary operators (`!`, `-`) should be attached to their parameters.  
+Unary operators (`!`, `-`) should be attached to their parameters. e.g., `if (!something)`
 
-A colon inside a `for each` loop (e.g., `for (Contact cnt : contacts) {`) should have one space on either side.  
+A colon inside a `for each` loop should have one space on either side. 
+>e.g., `for (Contact cnt : contacts) {`
 
-There should be no whitespace before commas, and one space after (e.g., `System.debug(LoggingLevel.INFO, 'some text');`).
+There should be no whitespace before commas, and one space after. 
+>e.g., `System.debug(LoggingLevel.INFO, 'some text');`
 
 If using C#-style properties, code should follow the following rules:
 
